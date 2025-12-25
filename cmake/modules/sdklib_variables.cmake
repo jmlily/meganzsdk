@@ -8,7 +8,19 @@ if (NOT WIN32)
     set(USE_CPPTHREAD 0)
 else()
     set(USE_CPPTHREAD 1)
-    set(CMAKE_GENERATOR_TOOLSET "v142")
+    # Only set toolset for Visual Studio generators, allowing automatic selection of appropriate version
+if(CMAKE_GENERATOR MATCHES "Visual Studio")
+    # Allow CMake to automatically select the appropriate platform toolset
+    # This avoids forcing v142 when using VS2022 which supports v143
+endif()
+
+# Add compiler flags to handle code page issues and nodiscard warnings
+if(MSVC)
+    # Disable C4819 warning (code page issues)
+    add_compile_options(/wd4819)
+    # Disable C4834 warning (discarded nodiscard return values)
+    add_compile_options(/wd4834)
+endif()
 endif()
 
 include(detect_host_architecture)
