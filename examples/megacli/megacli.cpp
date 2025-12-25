@@ -11594,6 +11594,32 @@ int main(int argc, char* argv[])
         nullptr;
 #endif
 
+// 配置HttpIO的代理设置（在创建MegaClient之前）
+    std::string proxy_url = "http://127.0.0.1:7890";
+    std::string proxy_username = "";
+    std::string proxy_password = "";
+
+    // 创建代理对象并设置参数
+    Proxy proxy;
+    if (!proxy_url.empty())
+    {
+        proxy.setProxyType(Proxy::CUSTOM);
+        proxy.setProxyURL(proxy_url.c_str());
+
+        if (!proxy_username.empty() && !proxy_password.empty())
+        {
+            proxy.setCredentials(proxy_username.c_str(), proxy_password.c_str());
+        }
+    }
+    else
+    {
+        // 默认设置为自动检测
+        proxy.setProxyType(Proxy::AUTO);
+    }
+
+    // 在创建MegaClient之前设置HttpIO的代理
+    httpIO->setproxy(proxy);
+
     auto clientType = getClientTypeFromArgs(config.clientType);
 
     // instantiate app components: the callback processor (DemoApp),

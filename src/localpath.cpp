@@ -1481,7 +1481,7 @@ bool Path::invariant() const
     // unless it already started with /
     // and that's how it worked before we added the "absolute" feature to LocalPath.
     // As a result of that though, there's nothing to adjust or check here for iOS.
-#elif WIN32
+#elif defined(WIN32)
     if (mPathType == PathType::ABSOLUTE_PATH)
     {
         // if it starts with \\ then it's absolute, either by us or provided
@@ -1550,7 +1550,7 @@ void Path::normalizeAbsolute()
         }
     }
 
-#elif WIN32
+#elif defined(WIN32)
 
     // Add a drive separator if necessary.
     // append \ to bare Windows drive letter paths
