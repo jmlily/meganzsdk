@@ -46,6 +46,7 @@
 #include "treeproc.h"
 #include "user.h"
 #include "useralerts.h"
+#include "mega/ActionPacketStreamProcessor.h"
 
 // FUSE support.
 #include <mega/common/client_adapter.h>
@@ -58,6 +59,7 @@ namespace mega {
 
 class Logger;
 struct NetworkConnectivityTestResults;
+class ActionPacketStreamProcessor; // Forward declaration
 
 class MEGA_API FetchNodesStats
 {
@@ -1847,11 +1849,15 @@ public:
     bool sc_checkActionPacket(Node* lastAPDeletedNode);
 
     void sc_updatenode();
+    void sc_updatenode(JSON* jsonStream);
     std::shared_ptr<Node> sc_deltree(bool& moveOperation);
+    std::shared_ptr<Node> sc_deltree(bool& moveOperation, JSON* jsonStream);
     handle sc_newnodes();
+    handle sc_newnodes(JSON* jsonStream);
     void sc_contacts();
     void sc_fileattr();
     void sc_userattr();
+    void sc_userattr(JSON* jsonStream);    
     bool sc_shares();
     bool sc_upgrade(nameid paymentType);
     void sc_paymentreminder();
@@ -2092,6 +2098,9 @@ public:
     JSON jsonsc;
     bool insca;
     bool insca_notlast;
+
+    // ActionPacket stream processor for on-the-fly parsing
+    std::unique_ptr<ActionPacketStreamProcessor> mActionPacketProcessor;
 
     // no two interrelated client instances should ever have the same sessionid
     char sessionid[10];
@@ -2475,6 +2484,7 @@ public:
     void handleauth(handle, byte*);
 
     bool procsc();
+    void processActionArray(JSON* j);
     size_t procreqstat();
 
     // API warnings
