@@ -67,6 +67,7 @@ set(SDKLIB_HEADERS
     include/mega/syncinternals/syncuploadthrottlingmanager.h
     include/mega/heartbeats.h
     include/mega/utils.h
+    include/mega/ActionPacketStreamProcessor.h
     include/mega/hashcash.h
     include/mega/utils_optional.h
     include/mega/account.h
@@ -165,6 +166,7 @@ set(SDKLIB_SOURCES
     src/user.cpp
     src/useralerts.cpp
     src/utils.cpp
+    src/ActionPacketStreamProcessor.cpp
     src/waiterbase.cpp
     src/crypto/cryptopp.cpp
     src/crypto/sodium.cpp
